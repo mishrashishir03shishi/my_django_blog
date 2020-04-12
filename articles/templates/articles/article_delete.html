@@ -1,0 +1,10 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+
+<div class = "delete">
+	<h1>Thank you! Your Article has been Deleted</h1>
+	<a href=" {% url 'articles:list' %} ">Go To Homepage!</a>
+
+</div>
+{% endblock %}
