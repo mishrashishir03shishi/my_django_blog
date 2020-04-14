@@ -1,10 +1,19 @@
 {% extends 'base_layout.html' %}
 
+{% block title %}
+	Delete {{article.title}}
+{% endblock%}
+
 {% block content %}
+	<div class="create-article">
+		<form method="POST">
+			{% csrf_token%}
+			<h2>Are you sure you want to delete : {{article.title}}? </h2>			
+			<div><button class="delete-button">Delete</button></div>
+		</form>
+		
 
-<div class = "delete">
-	<h1>Thank you! Your Article has been Deleted</h1>
-	<a href=" {% url 'articles:list' %} ">Go To Homepage!</a>
+		
+	</div>
 
-</div>
 {% endblock %}

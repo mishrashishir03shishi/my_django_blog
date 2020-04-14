@@ -5,16 +5,38 @@
 	<button class="button" type="submit">
 		Search
 	</button>
-</form>
-	<h1>Articles List</h1>
-	<div class="articles">
-		{% for article in articles %}
-		<div class="article">
-			<h2><a href="{% url 'articles:detail' slug=article.slug %}">{{article.title}}</a></h2>
-				<p>{{article.snippet}}</p>
-				<p>{{article.date}}</p>
-				<p class="author">Added By: {{article.author.username}} </p>
-		</div>
-	 {% endfor %}		
-	</div>
-	{% endblock %}
+	</form>
+		<h1>Articles List</h1>
+		{% if post %}
+			<div class="articles">
+			{% for article in post %}
+				<div class="article">
+					<h2><a href="{% url 'articles:detail' article.pk %}">{{article.title}}</a></h2>
+					<p>{{article.snippet}}</p>
+					<p>{{article.date}}</p>
+					<p class="author">Added By: {{article.author.username}} </p>
+				</div>
+	   	 	{% endfor %}		
+			</div>
+			{% if is_paginated %}
+        	<div class="pagination">
+            	<span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="/?page={{ page_obj.previous_page_number }}" class="highlight">Previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} 
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="/?page={{ page_obj.next_page_number }}" class="highlight">Next</a>
+                {% endif %}
+            	</span>
+       		</div>
+    		{% endif %}
+		{% else %}
+		<h2 style="text-align: center;">Sorry, No Articles Found!</h2>
+		{% endif %}
+		<div>
+            <footer><a href="{% url 'articles:about' %}"><h3 style="text-align: center; margin-top:80px"><u>About Us</u></h3></a> </footer>
+        </div>
+{% endblock %}

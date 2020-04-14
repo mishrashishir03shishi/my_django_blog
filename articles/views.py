@@ -1,55 +1,60 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Article
 from django.contrib.auth.decorators import login_required
-from . import forms
+from .models import Article
 from django.db.models import Q
+from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 
-def article_list(request):
-    articles = Article.objects.all().order_by('date');
-    return render(request, 'articles/article_list.html', { 'articles': articles })
+class article_list(ListView):
+    model = Article
+    template_name='articles/article_list.html'
+    context_object_name = 'post'
+    paginate_by=3
     
-@login_required(login_url="/accounts/login/")
-def article_detail(request, slug):
+#@login_required(login_url="/accounts/login/")
+class article_detail(LoginRequiredMixin,DetailView):
+    login_url='/accounts/login/'
+    model=Article
+    template_name='articles/article_detail.html'
     # return HttpResponse(slug)
-    article = Article.objects.get(slug=slug)
-    return render(request, 'articles/article_detail.html', { 'article': article })
+   
 
-@login_required(login_url="/accounts/login/")
-def article_create(request):
-    if request.method == 'POST':
-        form = forms.CreateArticle(request.POST, request.FILES)
-        if form.is_valid():
-            instance=form.save(commit=False)
-            instance.author = request.user
-            instance.save()
-            return redirect('articles:list')
-    else:
-        form = forms.CreateArticle()
-    return render(request, 'articles/article_create.html', { 'form': form })
+#@login_required(login_url="/accounts/login/")
+class article_create(LoginRequiredMixin,CreateView):
+    login_url='/accounts/login/'
+    model=Article
+    template_name='articles/article_create.html'    
+    fields=['title','body','thumb'] 
+
+    def form_valid(self,form):
+        form.instance.author=self.request.user
+        return super().form_valid(form)
 
 
-@login_required(login_url="/accounts/login/")
-def article_edit(request,slug):
-    article=Article.objects.get(slug=slug)
-    form = forms.CreateArticle(instance=article)
-    Article.objects.filter(slug=slug).delete()
-    if request.method == 'POST':        
-        if form.is_valid():
-            instance=form.save(commit=False)
-            instance.author = request.user
-            instance.save()
-            return redirect('articles:list')    
-    return render(request, 'articles/article_create.html', { 'form': form })
+#@login_required(login_url="/accounts/login/")
+class article_edit(LoginRequiredMixin,UpdateView):
+    login_url='/accounts/login/'
+    model=Article
+    template_name='articles/article_edit.html'
+    fields=['title','body','thumb']   
 
 
-@login_required(login_url="/accounts/login/")
-def article_delete(request,slug):
-    Article.objects.filter(slug=slug).delete()
-    return render(request,'articles/article_delete.html')
+#@login_required(login_url="/accounts/login/")
+class article_delete(LoginRequiredMixin,DeleteView):
+    login_url='/accounts/login/'
+    model=Article
+    template_name='articles/article_delete.html'
+    success_url=reverse_lazy('articles:list')
+    
 
 def article_search(request):
     query=request.GET.get('q')
-    articles = Article.objects.filter(Q(title__icontains=query) | Q(body__icontains=query))    
-    return render(request, 'articles/article_list.html', { 'articles': articles } )
+    post = Article.objects.filter(Q(title__icontains=query) | Q(body__icontains=query))    
+    return render(request, 'articles/article_list.html', { 'post': post } )
+
+def about(request):
+    return render(request, 'articles/about.html')

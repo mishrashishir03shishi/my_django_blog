@@ -4,11 +4,18 @@
 <div class="article-detail">
     <div class="article">
     	<img src=" {{article.thumb.url}} ">
-    	<td><a href=" {% url 'articles:edit' slug=article.slug %} "><button  class="button-detail" type="submit">Edit</button></a> </td>
-    	 <td><a href=" {% url 'articles:delete' slug=article.slug %} "><button   class="button-detail" type="submit">Delete</button></a></td>
+    	{% if request.user == article.author %}
+    	<div class="detail-buttons">
+    		<a href=" {% url 'articles:edit' article.pk %} " class="highlight-button">Edit</a> 
+    		<a href=" {% url 'articles:delete' article.pk %} " class="highlight-button">Delete</a>
+    	</div>
+    	{% endif %}
         <h2>{{ article.title }}</h2>
+        <div class="paragraph">
         <p>{{ article.body }}</p>
+        <p> By: {{article.author}} </p>
         <p>{{ article.date }}</p>
+        </div>
     </div>
 </div>
 {% endblock %}
