@@ -12,7 +12,7 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('articles/', include('articles.urls')),
-    path('accounts/', include('accounts.urls')),    
+    path('accounts/', include('accounts.urls')), 
     path('', article_views.article_list.as_view(), name="home"),
 ]
 
