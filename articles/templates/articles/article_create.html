@@ -1,12 +1,44 @@
 {% extends 'base_layout.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-    <div class="create-article">
-        <h2>Create a new Awesome Article!</h2>
-        <form class="site-form" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div><button class="update-button">Post</button></div>
-        </form>
-    </div>    
+<div class="container">
+    <div class="row">
+        <div class="col col-md-8" style="border-right:1px solid black;">
+        	<h2>Create a new Awesome Article!</h2>
+        	<hr>
+	        <div style="margin-top: 20px; margin-left: 10px; margin-bottom: 20px; margin-right: 5px;">
+	        	
+		        <form class="site-form" method="post" enctype="multipart/form-data">
+		            {% csrf_token %}
+		            {{ form|crispy }}
+		            <div class="d-flex justify-content-center"><button type="submit" class="btn btn-success">Post</button></div>		            
+		        </form>
+	        </div>
+	        <hr>
+	    </div>
+	     
+	     <div class="col-md-4">
+          <div class="d-flex flex-column">
+            <p class="text-left">Search Something:</p>
+                <form method="GET" action= "{% url 'articles:search' %}" >
+                    <div class="input-group mb-3">
+                      <input type="" name="q" value="{{request.GET.q}}" class="form-control" placeholder="Type Something.." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                      <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary"><span class="fa fa-search"></span> Search</button>
+                      </div>
+                    </div>
+                 </form>
+            <p class="font-italic font-weight-bold">Follow me on social media:</p>
+            <div>
+              <a href="https://www.facebook.com/shishir.mishra.39395" ><i style="font-size:30px; margin-right: 20px;" class="fa">&#xf09a;</i></a>
+              <a href="https://www.instagram.com/mishrashishir3/" ><i style="font-size:30px; margin-right: 20px; color:red;" class="fa">&#xf16d;</i></a>
+            </div>
+          </div>          
+        </div>    
+
+	</div>
+</div>
+
+     
 {% endblock %}

@@ -2,34 +2,62 @@
 
 {% block content %}
 
-<div>
-	<div class="description"></div>
-	<h1>About The Website:</h1>
-	<p>This Website is our first Web Development Project.</p>
-	<p>It is developed using Django Framework for Backend</p><br><br>
-	<h2>It has the following functionalities:</h2><br>
-	<ul style="line-height: 1.4;"> 
-		<li>Creating new Blogs along with Pictures</li>
-		<li>Editing your Blog</li>
-		<li>Deleteing Your Blog</li>
-		<li>Compltetely Secure authentication system for Users</li>
-		<li>Search Function</li>
-	 </ul><br><br>
-	 <h1>About The Developers:</h1><br>
-	 <div class="flex-container">
-	 	<div style="line-height: 1.4">
-	 		<h2>Shishir Mishra</h2>
-	 		<p>e-mail : shishir@iitg.ac.in</p>
-	 		<p>EEE Dept, IIT Guwahati </p>
-	 	</div>
-	 	<div>
-	 		<h2>Abhishek Kumar</h2>
-	 		<p>e-mail : kumar18g@iitg.ac.in</p>
-	 		<p>CSE Dept, IIT Guwahati </p> 		
-	 	</div>
-	 	
-	 </div>
+<div class="container">
+    <div class="row">
+        <div class="col col-md-8" style="border-right:1px solid black;">
+			<div class="description"></div>
+			<h1>About The Website:</h1>
+			<p>This Website is our first Web Development Project.</p>
+			<p>It is developed using Django Framework for Backend</p><br><hr><br>
+			<h2>It has the following functionalities:</h2><br>
+			<ul style="line-height: 1.4;"> 
+				<li>Creating new Blogs along with Pictures</li>
+				<li>Editing your Blog</li>
+				<li>Deleteing Your Blog</li>
+				<li>Compltetely Secure authentication system for Users</li>
+				<li>Search Function</li>
+			 </ul><br><hr><br>
+			 <h1>About The Developers:</h1><br>
+			 <div class="d-flex justify-content-around" style="margin-bottom: 20px;">
+			 	<div style="line-height: 1.4">
+			 		<h2>Shishir Mishra</h2>
+			 		
+			 		<p>e-mail : shishir@iitg.ac.in</p>
+			 		<p>EEE Dept, IIT Guwahati </p>
+			 	</div>
+			 	<div>
+			 		<h2>Abhishek Kumar</h2>
+			 		
+			 		<p>e-mail : kumar18g@iitg.ac.in</p>
+			 		<p>CSE Dept, IIT Guwahati </p> 		
+			 	</div>
+			 	
+			 </div>
+			 <hr>
+
+			</div>
+			 <div class="col-md-4">
+	          <div class="d-flex flex-column">
+	            <p class="text-left">Search Something:</p>
+	                <form method="GET" action= "{% url 'articles:search' %}" >
+	                    <div class="input-group mb-3">
+	                      <input type="" name="q" value="{{request.GET.q}}" class="form-control" placeholder="Type Something.." aria-label="Recipient's username" aria-describedby="basic-addon2">
+	                      <div class="input-group-append">
+	                        <button type="submit" class="btn btn-primary"><span class="fa fa-search"></span> Search</button>
+	                      </div>
+	                    </div>
+	                 </form>
+	            <p class="font-italic font-weight-bold">Follow me on social media:</p>
+	            <div>
+	              <a href="https://www.facebook.com/shishir.mishra.39395" ><i style="font-size:30px; margin-right: 20px;" class="fa">&#xf09a;</i></a>
+	              <a href="https://www.instagram.com/mishrashishir3/" ><i style="font-size:30px; margin-right: 20px; color:red;" class="fa">&#xf16d;</i></a>
+	            </div>
+	          </div>          
+	        </div>    
+
+	</div>
 </div>
+
 
 
 

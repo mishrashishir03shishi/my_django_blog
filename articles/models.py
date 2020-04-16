@@ -10,6 +10,9 @@ class Article(models.Model):
     thumb = models.ImageField(default='default.png', blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    class Meta:
+       ordering = ['-date']
+
     def get_absolute_url(self):
         return reverse('articles:detail', kwargs={'pk':self.pk})
 
@@ -17,4 +20,4 @@ class Article(models.Model):
         return self.title
 
     def snippet(self):
-        return self.body[:50] + '...'
+        return self.body[:200] + '...'

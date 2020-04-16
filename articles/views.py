@@ -15,7 +15,7 @@ class article_list(ListView):
     model = Article
     template_name='articles/article_list.html'
     context_object_name = 'post'
-    paginate_by=3
+    paginate_by=5
     
 #@login_required(login_url="/accounts/login/")
 class article_detail(LoginRequiredMixin,DetailView):

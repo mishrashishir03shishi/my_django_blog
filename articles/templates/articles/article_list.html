@@ -1,42 +1,71 @@
 {% extends 'base_layout.html' %}
 {% block content%}
-<form class="new-form" method="GET" action= "{% url 'articles:search' %}" >
-	<input type="" name="q" value="{{request.GET.q}}" placeholder="Search..." >
-	<button class="button" type="submit">
-		Search
-	</button>
-	</form>
-		<h1>Articles List</h1>
-		{% if post %}
-			<div class="articles">
-			{% for article in post %}
-				<div class="article">
-					<h2><a href="{% url 'articles:detail' article.pk %}">{{article.title}}</a></h2>
-					<p>{{article.snippet}}</p>
-					<p>{{article.date}}</p>
-					<p class="author">Added By: {{article.author.username}} </p>
-				</div>
-	   	 	{% endfor %}		
+	
+	<div class="container">
+
+      <div class="row">
+      	{% if post %}
+        <div class="col col-md-8" style="border-right:1px solid black;">
+        	{% for article in post %}
+          <div class="d-flex flex-column" >          	
+            <div class="card" style="margin-bottom: 20px;" >
+              <img class="card-img-top" src="{{article.thumb.url}}" alt="Card image cap" style="max-height:500px; padding: 10px 10px; object-fit: cover;">
+              <div class="card-body">
+                <h5 class="card-title">{{article.title}}</h5>
+                <p class="card-text">{{article.snippet}}</p>
+               </div>
+               <ul class="list-group list-group-flush">
+               	<li class="list-group-item">Added By: {{article.author.username}}</li>
+               	<li class="list-group-item">{{article.date}}</li>
+               </ul>
+               <div class="card-body">
+                <a href="{% url 'articles:detail' article.pk %}" class="btn btn-primary">Read more</a>
+              </div>
+            </div>            
+          </div>
+          {% endfor %}
+        
+	        {% if is_paginated %}
+	        <div class="d-flex justify-content-center">
+		        <nav aria-label="Page navigation example">
+				  <ul class="pagination">
+				  	{% if page_obj.has_previous %}
+				    <li class="page-item"><a class="page-link" href="/?page={{ page_obj.previous_page_number }}">Previous</a></li>
+				    {% endif %}
+				    <li class="page-item"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+				    {% if page_obj.has_next %}		    
+				    <li class="page-item"><a class="page-link" href="/?page={{ page_obj.next_page_number }}">Next</a></li>
+				    {% endif %}
+				  </ul>
+				</nav>
 			</div>
-			{% if is_paginated %}
-        	<div class="pagination">
-            	<span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="/?page={{ page_obj.previous_page_number }}" class="highlight">Previous</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} 
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="/?page={{ page_obj.next_page_number }}" class="highlight">Next</a>
-                {% endif %}
-            	</span>
-       		</div>
-    		{% endif %}
+			{% endif %}
 		{% else %}
-		<h2 style="text-align: center;">Sorry, No Articles Found!</h2>
-		{% endif %}
-		<div>
-            <footer><a href="{% url 'articles:about' %}"><h3 style="text-align: center; margin-top:80px"><u>About Us</u></h3></a> </footer>
+		<p class="h3">Sorry, No Articles Found!</p>
+		
+        {% endif %}
         </div>
-{% endblock %}
+
+
+        <div class="col-md-4">
+          <div class="d-flex flex-column">
+            <p class="text-left">Search Something:</p>
+	            <form method="GET" action= "{% url 'articles:search' %}" >
+		            <div class="input-group mb-3">
+		              <input type="" name="q" value="{{request.GET.q}}" class="form-control" placeholder="Type Something.." aria-label="Recipient's username" aria-describedby="basic-addon2">
+		              <div class="input-group-append">
+		                <button type="submit" class="btn btn-primary"><span class="fa fa-search"></span> Search</button>
+		              </div>
+		            </div>
+       			 </form>
+            <p class="font-italic font-weight-bold">Follow me on social media:</p>
+            <div>
+              <a href="https://www.facebook.com/shishir.mishra.39395" ><i style="font-size:30px; margin-right: 20px;" class="fa">&#xf09a;</i></a>
+              <a href="https://www.instagram.com/mishrashishir3/" ><i style="font-size:30px; margin-right: 20px; color:red;" class="fa">&#xf16d;</i></a>
+            </div>
+          </div>          
+        </div>         
+        
+      </div>
+    </div>
+    {% endblock %}
