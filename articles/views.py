@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Article
 from django.contrib.auth.decorators import login_required
@@ -8,12 +8,14 @@ from django.views.generic import ListView,DetailView,CreateView,UpdateView,Delet
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.core.exceptions import PermissionDenied
+
 
 class article_list(ListView):
     model = Article
     template_name='articles/article_list.html'
     context_object_name = 'post'
-    paginate_by=3
+    paginate_by=5
     
 #@login_required(login_url="/accounts/login/")
 class article_detail(LoginRequiredMixin,DetailView):
@@ -42,6 +44,12 @@ class article_edit(LoginRequiredMixin,UpdateView):
     template_name='articles/article_edit.html'
     fields=['title','body','thumb']   
 
+    def dispatch(self, request, *args, **kwargs): # new
+        obj = self.get_object()
+        if obj.author != self.request.user:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
 
 #@login_required(login_url="/accounts/login/")
 class article_delete(LoginRequiredMixin,DeleteView):
@@ -49,6 +57,12 @@ class article_delete(LoginRequiredMixin,DeleteView):
     model=Article
     template_name='articles/article_delete.html'
     success_url=reverse_lazy('articles:list')
+
+    def dispatch(self, request, *args, **kwargs): # new
+        obj = self.get_object()
+        if obj.author != self.request.user:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
     
 
 def article_search(request):
